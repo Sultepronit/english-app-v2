@@ -11,10 +11,172 @@ let currentCardId = 0;
 let currentCard = [];
 let wordVersions = {};
 let direction = '';
-//var progress;
-let mark = '';
+//let progress;
+//let mark = '';
+
+let learnPlus = 0, learnMinus =0, learned = 0;
+let confirmPlus = 0, confirmMinus = 0, confirmed = 0, notConfirmed = 0;
+let repeatPlus = 0, repeatMinus = 0, repeated = 0, returned = 0;
+
+let updateProgress = function(mark) {
+	//if(mark == "UNEVALUATED") return;
+	
+	let inputStatus = [ currentCard.s, currentCard.f, currentCard.b ];
+	//console.log('b: ' + inputStatus);
+	//console.log('b ' + currentCard[0] + ': ' + currentCard[1] + ' | ' + currentCard[2]);
+	
+	if(learnStatus === 'LEARN') {
+		if(mark == "NEUTRAL") mark = "BAD";
+		
+		if(mark == "BAD") {
+			sessionList.push("LEARN");
+			//currentCard[2])
+			learnList.push(currentCardId);
+			console.log("I'm back!");
+		}
+	}
+	
+	let increment = 0;
+	if(mark === 'GOOD') {
+		increment++;
+		switch(learnStatus) {
+			case 'LEARN':
+				learnPlus++;
+				break;
+			case 'CONFIRM':
+				confirmPlus++;
+				break;
+			case 'REPEAT':
+				repeatPlus++;
+				break;
+			default:
+				break;
+		}
+	} else if(mark === 'BAD') {
+		increment--;
+		switch(learnStatus) {
+			case 'LEARN':
+				learnMinus++;
+				break;
+			case 'CONFIRM':
+				confirmMinus++;
+				break;
+			case 'REPEAT':
+				repeatMinus++;
+				break;
+			default:
+				break;
+		}
+	}
+
+	if(direction === "FORWARD") {
+		currentCard.f += increment;
+		if(currentCard.f < 0 && increment > 0) currentCard.f = 0;
+	} else { //BACKWARD
+		currentCard.b += increment;
+	}
+	
+	upgradeOrDegrade: {
+		//degrade
+		if(currentCard.f < -1 || currentCard.b < -1) {
+			if(learnStatus === 'LEARN') {
+                if(currentCard.b < -1) {
+                    currentCard.f = 0;
+                    currentCard.b = 0;
+                }
+			} else { //confrim & repeat
+				currentCard.s = 0;
+				currentCard.f = 0;
+				currentCard.b = 0;
+				if(learnStatus === 'CONFIRM') {
+					notConfirmed++;
+				} else { // REPEAT
+					returned++;
+				}
+			} 
+			console.log("degraded!");
+			break upgradeOrDegrade;
+		}
+		
+        //upgrade learn
+		if(learnStatus === 'LEARN') {
+			if(currentCard.f > 1 && currentCard.b > 1) { 
+				currentCard.s = 1;
+				currentCard.f = 0;
+				currentCard.b = 0;
+				learned++;
+				console.log("learned!");
+			}
+			break upgradeOrDegrade;
+		}
+		
+		//upgrade confirm & repeat
+		if(currentCard.f > 0 && currentCard.b > 0) {
+			if(learnStatus === 'REPEAT') {
+				currentCard.s = nextRepeatedStatus++;
+				//toCell(2, 'L', nextRepeatedStatus);
+				repeated++;
+			} else { // CONFIRM
+				currentCard.s = 2;
+				confirmed++;
+			}
+			currentCard.f = 0;
+			currentCard.b = 0;
+			console.log("repeted!");
+			break upgradeOrDegrade;
+		}
+	}
+	
+	/*if(inputStatus[0] !== currentCard[0]) {
+		toCell(currentCardId + 1, 'A', currentCard[0]);
+	}
+	if(inputStatus[1] !== currentCard[1]) {
+		toCell(currentCardId + 1, 'B', currentCard[1]);
+	}
+	if(inputStatus[2] !== currentCard[2]) {
+		toCell(currentCardId + 1, 'C', currentCard[2]);
+	}
+	
+	console.log('a ' + currentCard[0] + ': ' + currentCard[1] + ' | ' + currentCard[2]);
+	if(direction == "BACKWARD" && mark == "GOOD") {
+		nextCard();
+	} else {
+		startTraining();
+	}*/
+    console.log('b ' + inputStatus[0] + ': ' + inputStatus[1] + ' ' + inputStatus[2]);
+    console.log('a ' + currentCard.s + ': ' + currentCard.f + ' ' + currentCard.b);
+    nextCard();
+}
+
+//function showAnswer() {
+let showAnswer = function() {
+	console.log(currentCard);
+	//progress = "EVALUATE";
+    $('.evaluation').show();
+    $('.show').hide();
+
+	//playSound();
+    pronunciation(0);
+	
+	$(".transcription").text(currentCard.trsc);
+	$(".example").text(currentCard.e);
+	if(direction == "FORWARD") {
+		$(".translation").append(currentCard.trsl);
+	} else { //BACKWARD
+		$(".word").text(currentCard.w);
+	}
+	
+	//if(wordVersions.words.length > 0) {
+    if(wordVersions) {
+		$('.word').empty();
+		$(".word").append(wordVersions.text);
+	}
+}
 
 function askQuestion() {
+    $('.evaluation').hide();
+    $('.show').show();
+
 	//$(".word").css("border-bottom", "6px solid white");
 	$('.word').empty();
 	$(".translation").empty();
@@ -85,8 +247,7 @@ function nextCard() {
 			console.log( learnStatus + '!!!');
 			break;
 	}
-
-    currentCardId = 23;
+    //currentCardId = 23;
 	
     currentCard = jsDb[currentCardId];
     let info = currentCardId + ' [' + currentCard.s + ']: ' + currentCard.f + ' ' + currentCard.b;
@@ -99,3 +260,12 @@ function nextCard() {
 	mark = "UNEVALUATED";*/
 	askQuestion();
 }
+
+let main = function() {
+    $('.show').on('click', showAnswer);
+    $('.good').on('click', function() {updateProgress("GOOD");});
+    $('.neutral').on('click', function() {updateProgress("NEUTRAL");});
+    $('.bad').on('click', function() {updateProgress("BAD");});
+}
+
+$(document).ready(main);

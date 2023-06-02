@@ -1,7 +1,62 @@
+body {
+    font-size: 100%;
+}
+
 p {
 	margin: 0.1em;
 }
 
 main p {
 	text-align: center;
+}
+
+.word {
+     font-size: 2em;
+}
+
+.transcription {
+    font-size: 1.5em;
+}
+
+.translation {
+    font-size: 1.6em;
+}
+
+.example {
+    font-size: 1.5em;
+    margin: 0.6em;
+}
+
+
+
+footer {
+	/*position: sticky;*/
+	position: fixed;
+	bottom: 0;
+	width: 99%;
+	/*margin-top: 20em;*/
+	padding-top: 1em;
+	padding-bottom: 2em;
+	background-color: white;
+}
+
+footer button {
+	height: 6em;
+	margin: 1%;
+}
+
+.show {
+	width: 95%;
+}
+
+.evaluation button {
+	width: 29vw;
+}
+
+.good {
+	background-color: green;
+}
+
+.bad {
+	background-color: red;
 }

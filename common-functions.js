@@ -26,17 +26,14 @@ let audio = new Audio();
 
 function pronunciation(wordCounter) {
 	cardWord = '';
-	if(wordVersions.words.length > 0) {
+	//if(wordVersions.words.length > 0) {
+	if(wordVersions) {
 		cardWord = wordVersions.words[wordCounter];
 		//console.log(wordCounter);
 	} else {
-		cardWord = currentCard[5];
+		cardWord = currentCard.w;
 	}
 	console.log(cardWord);
-	
-	/*let utterance = new SpeechSynthesisUtterance(cardWord);
-	utterance.lang = 'en';
-	utterance.rate = 0.7;*/
 	
 	let urls = soundObject[cardWord];
 	if(urls) {
@@ -50,7 +47,8 @@ function pronunciation(wordCounter) {
 		
 		audio.onended = function() { 
 			wordCounter++;
-			if(wordCounter < wordVersions.words.length) {
+			//if(wordCounter < wordVersions.words.length) {
+			if(wordVersions && wordCounter < wordVersions.words.length) {
 				pronunciation(wordCounter);
 			}
 		}
@@ -64,16 +62,16 @@ function pronunciation(wordCounter) {
 
 		utterance.onend = (event) => {
 			wordCounter++;
-			if(wordCounter < wordVersions.words.length) {
+			if(wordVersions && wordCounter < wordVersions.words.length) {
 				pronunciation(wordCounter);
 			}
 		}
 	}
 }
 
-function playSound() {
-	if(progress == "TRAINING" || progress == "TYPE_IN_ANSWER") return;
+/*function playSound() {
+	//if(progress == "TRAINING" || progress == "TYPE_IN_ANSWER") return;
 	//pronunciation3(0);
 	pronunciation(0);
-}
+}*/
 
