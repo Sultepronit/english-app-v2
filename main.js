@@ -1,8 +1,9 @@
 'use strict';
 
-let jsDb = [];
+const jsDb = [];
 let repeatList = [], confirmList = [], learnList = [];
-let sessionList = [];
+const sessionList = [];
+let sessionLength = 0;
 
 let maxToRepeat = 0, nextRepeatedStatus = 0;
 
@@ -18,7 +19,28 @@ let learnPlus = 0, learnMinus =0, learned = 0;
 let confirmPlus = 0, confirmMinus = 0, confirmed = 0, notConfirmed = 0;
 let repeatPlus = 0, repeatMinus = 0, repeated = 0, returned = 0;
 
-let updateProgress = function(mark) {
+function sendChanges(inputStatus) {
+	console.log('b ' + inputStatus[0] + ': ' + inputStatus[1] + ' ' + inputStatus[2]);
+    console.log('a ' + currentCard.s + ': ' + currentCard.f + ' ' + currentCard.b);
+	/*if(inputStatus[0] !== currentCard[0]) {
+		toCell(currentCardId + 1, 'A', currentCard[0]);
+	}
+	if(inputStatus[1] !== currentCard[1]) {
+		toCell(currentCardId + 1, 'B', currentCard[1]);
+	}
+	if(inputStatus[2] !== currentCard[2]) {
+		toCell(currentCardId + 1, 'C', currentCard[2]);
+	}
+	
+	console.log('a ' + currentCard[0] + ': ' + currentCard[1] + ' | ' + currentCard[2]);
+	if(direction == "BACKWARD" && mark == "GOOD") {
+		nextCard();
+	} else {
+		startTraining();
+	}*/
+}
+
+function updateProgress(mark) {
 	//if(mark == "UNEVALUATED") return;
 	
 	let inputStatus = [ currentCard.s, currentCard.f, currentCard.b ];
@@ -143,8 +165,9 @@ let updateProgress = function(mark) {
 	} else {
 		startTraining();
 	}*/
-    console.log('b ' + inputStatus[0] + ': ' + inputStatus[1] + ' ' + inputStatus[2]);
-    console.log('a ' + currentCard.s + ': ' + currentCard.f + ' ' + currentCard.b);
+    //console.log('b ' + inputStatus[0] + ': ' + inputStatus[1] + ' ' + inputStatus[2]);
+    //console.log('a ' + currentCard.s + ': ' + currentCard.f + ' ' + currentCard.b);
+	sendChanges(inputStatus);
     nextCard();
 }
 
@@ -213,8 +236,29 @@ function askQuestion() {
 	}
 }
 
+function showStats() {
+	$('.stats').empty();
+	let cn = sessionLength - sessionList.length;
+	let pc = Math.round(cn / sessionLength * 100);
+	let re = '<b>';
+	re += cn + '/' + sessionLength + ': ' + pc + '%</b>';
+	re += '</b>';
+	
+	re += ' | <span class="green">l: ';
+	re += learnPlus + '-' + learnMinus;
+	re += ' <b>' + learned + '</b></span>';
+	re += ' | <span class="blue">c: ';
+	re += confirmPlus + '-' + confirmMinus;
+	re += '<b> ' + confirmed + '-' + notConfirmed + '</b></span>';
+	re += ' | r: ';
+	re += repeatPlus + '-' + repeatMinus;
+	re += '<b> ' + repeated + '-' + returned + '</b>';
+	
+	$('.stats').append(re);
+}
+
 function nextCard() {
-	//showStats();
+	showStats();
 	if(sessionList.length < 1) {
 		$('.word').text('Happy End!');
 		return;
@@ -261,11 +305,12 @@ function nextCard() {
 	askQuestion();
 }
 
-let main = function() {
+const main = function() {
     $('.show').on('click', showAnswer);
     $('.good').on('click', function() {updateProgress("GOOD");});
     $('.neutral').on('click', function() {updateProgress("NEUTRAL");});
     $('.bad').on('click', function() {updateProgress("BAD");});
+	$('.speak').on('click', function() {pronunciation(0);});
 }
 
 $(document).ready(main);

@@ -31,6 +31,7 @@ function prepareSession() {
 	for(let i = 0; i < repeatNumber; i++) sessionList.push("REPEAT");
 	for(let i = 0; i < confirmNumber; i++) sessionList.push("CONFIRM");
 	for(let i = 0; i < learnNumber; i++) sessionList.push("LEARN");
+	sessionLength = sessionList.length;
 	console.log(sessionList);
 
     nextCard();

@@ -6,12 +6,24 @@ p {
 	margin: 0.1em;
 }
 
+.card-info {
+	float: left;
+}
+
+.speak {
+	float: right;
+}
+
+main {
+	clear: both;
+}
+
 main p {
 	text-align: center;
 }
 
 .word {
-     font-size: 2em;
+     font-size: 2.5em;
 }
 
 .transcription {
@@ -20,11 +32,12 @@ main p {
 
 .translation {
     font-size: 1.6em;
+	margin: 0.6em;
 }
 
 .example {
     font-size: 1.5em;
-    margin: 0.6em;
+    /*margin: 0.6em;*/
 }
 
 
@@ -59,4 +72,12 @@ footer button {
 
 .bad {
 	background-color: red;
+}
+
+.blue {
+	color: blue;
+}
+
+.green {
+	color: green;
 }
