@@ -12,8 +12,6 @@ let currentCardId = 0;
 let currentCard = [];
 let wordVersions = {};
 let direction = '';
-//let progress;
-//let mark = '';
 
 let learnPlus = 0, learnMinus =0, learned = 0;
 let confirmPlus = 0, confirmMinus = 0, confirmed = 0, notConfirmed = 0;
@@ -35,20 +33,12 @@ function sendChanges(inputStatus) {
 	if(inputStatus[2] !== currentCard.b) {
 		toCell(currentCardId, 'C', currentCard.b);
 	}
-	
-	/*if(direction == "BACKWARD" && mark == "GOOD") {
-		nextCard();
-	} else {
-		startTraining();
-	}*/
 }
 
 function updateProgress(mark) {
 	//if(mark == "UNEVALUATED") return;
 	
 	let inputStatus = [ currentCard.s, currentCard.f, currentCard.b ];
-	//console.log('b: ' + inputStatus);
-	//console.log('b ' + currentCard[0] + ': ' + currentCard[1] + ' | ' + currentCard[2]);
 	
 	if(learnStatus === 'LEARN') {
 		if(mark == "NEUTRAL") mark = "BAD";
@@ -152,24 +142,6 @@ function updateProgress(mark) {
 		}
 	}
 	
-	/*if(inputStatus[0] !== currentCard[0]) {
-		toCell(currentCardId + 1, 'A', currentCard[0]);
-	}
-	if(inputStatus[1] !== currentCard[1]) {
-		toCell(currentCardId + 1, 'B', currentCard[1]);
-	}
-	if(inputStatus[2] !== currentCard[2]) {
-		toCell(currentCardId + 1, 'C', currentCard[2]);
-	}
-	
-	console.log('a ' + currentCard[0] + ': ' + currentCard[1] + ' | ' + currentCard[2]);
-	if(direction == "BACKWARD" && mark == "GOOD") {
-		nextCard();
-	} else {
-		startTraining();
-	}*/
-    //console.log('b ' + inputStatus[0] + ': ' + inputStatus[1] + ' ' + inputStatus[2]);
-    //console.log('a ' + currentCard.s + ': ' + currentCard.f + ' ' + currentCard.b);
 	sendChanges(inputStatus);
     nextCard();
 }
@@ -302,9 +274,6 @@ function nextCard() {
 
 	direction = (currentCard.f > currentCard.b) ? "BACKWARD" : "FORWARD";
 	
-	/*wordVersions = {words: [], labels: [], random: -1, text: ''};
-	progress = "QUESTION";
-	mark = "UNEVALUATED";*/
 	askQuestion();
 }
 
