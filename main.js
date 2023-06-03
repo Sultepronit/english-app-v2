@@ -311,6 +311,7 @@ const main = function() {
     $('.neutral').on('click', function() {updateProgress("NEUTRAL");});
     $('.bad').on('click', function() {updateProgress("BAD");});
 	$('.speak').on('click', function() {pronunciation(0);});
+	$('.word').on('click', function() {pronunciation(0);});
 }
 
 $(document).ready(main);
