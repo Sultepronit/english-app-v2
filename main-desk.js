@@ -1,7 +1,7 @@
 'use strict';
 
 const jsDb = [];
-let repeatList = []; //, confirmList = [], learnList = [];
+let repeatList = [];
 /*const sessionList = [];
 let sessionLength = 0;*/
 
@@ -12,133 +12,69 @@ let currentCardId = 0;
 let currentCard = [];
 let wordVersions = {};
 let direction = '';
-let progress;
+let progress = '';
 let mark = '';
 
-let learnPlus = 0, learnMinus =0, learned = 0;
-let confirmPlus = 0, confirmMinus = 0, confirmed = 0, notConfirmed = 0;
-let repeatPlus = 0, repeatMinus = 0, repeated = 0, returned = 0;
+let plus = 0, minus = 0, repeated = 0, returned = 0;
 
 function sendNextRepeated() {
-	//toCell(2 - 1, 'L', nextRepeated);
+	toCell(11 - 1, 'L', nextRepeated);
 }
 
 function sendChanges(inputStatus) {
 	console.log('b ' + inputStatus[0] + ': ' + inputStatus[1] + ' ' + inputStatus[2]);
     console.log('a ' + currentCard.s + ': ' + currentCard.f + ' ' + currentCard.b);
-	/*if(inputStatus[0] !== currentCard.s) {
-		toCell(currentCardId, 'A', currentCard.s);
+	if(currentCard.s < 0) {
+		currentCard.s = 0;
+		toCell(currentCardId, 'A', 0);
+	}
+	if(inputStatus[0] !== currentCard.s) {
+		toCell(currentCardId, 'D', currentCard.s);
 	}
 	if(inputStatus[1] !== currentCard.f) {
-		toCell(currentCardId, 'B', currentCard.f);
+		toCell(currentCardId, 'E', currentCard.f);
 	}
 	if(inputStatus[2] !== currentCard.b) {
-		toCell(currentCardId, 'C', currentCard.b);
-	}*/
+		toCell(currentCardId, 'F', currentCard.b);
+	}
 }
 
 function updateProgress() {
-	//if(mark == "UNEVALUATED") return;
+	if(mark == "UNEVALUATED") return;
 	
 	let inputStatus = [ currentCard.s, currentCard.f, currentCard.b ];
-	//console.log('b: ' + inputStatus);
-	//console.log('b ' + currentCard[0] + ': ' + currentCard[1] + ' | ' + currentCard[2]);
-	
-	if(learnStatus === 'LEARN') {
-		if(mark == "NEUTRAL") mark = "BAD";
-		
-		if(mark == "BAD") {
-			sessionList.push("LEARN");
-			//currentCard[2])
-			learnList.push(currentCardId);
-			console.log("I'm back!");
-		}
-	}
 	
 	let increment = 0;
 	if(mark === 'GOOD') {
 		increment++;
-		switch(learnStatus) {
-			case 'LEARN':
-				learnPlus++;
-				break;
-			case 'CONFIRM':
-				confirmPlus++;
-				break;
-			case 'REPEAT':
-				repeatPlus++;
-				break;
-			default:
-				break;
-		}
+		plus++;
 	} else if(mark === 'BAD') {
 		increment--;
-		switch(learnStatus) {
-			case 'LEARN':
-				learnMinus++;
-				break;
-			case 'CONFIRM':
-				confirmMinus++;
-				break;
-			case 'REPEAT':
-				repeatMinus++;
-				break;
-			default:
-				break;
-		}
+		minus++;
 	}
 
 	if(direction === "FORWARD") {
 		currentCard.f += increment;
-		if(currentCard.f < 0 && increment > 0) currentCard.f = 0;
 	} else { //BACKWARD
 		currentCard.b += increment;
 	}
 	
 	upgradeOrDegrade: {
 		//degrade
-		if(currentCard.f < -1 || currentCard.b < -1) {
-			if(learnStatus === 'LEARN') {
-                if(currentCard.b < -1) {
-                    currentCard.f = 0;
-                    currentCard.b = 0;
-                }
-			} else { //confrim & repeat
-				currentCard.s = 0;
-				currentCard.f = 0;
-				currentCard.b = 0;
-				if(learnStatus === 'CONFIRM') {
-					notConfirmed++;
-				} else { // REPEAT
-					returned++;
-				}
-			} 
+		if(currentCard.f < -1 || currentCard.b < -2) {
+			returned++;
+			currentCard.s = -1;
+			currentCard.f = 0;
+			currentCard.b = 0;
 			console.log("degraded!");
 			break upgradeOrDegrade;
 		}
 		
-        //upgrade learn
-		if(learnStatus === 'LEARN') {
-			if(currentCard.f > 1 && currentCard.b > 1) { 
-				currentCard.s = 1;
-				currentCard.f = 0;
-				currentCard.b = 0;
-				learned++;
-				console.log("learned!");
-			}
-			break upgradeOrDegrade;
-		}
-		
-		//upgrade confirm & repeat
+		//upgrade
 		if(currentCard.f > 0 && currentCard.b > 0) {
-			if(learnStatus === 'REPEAT') {
-				currentCard.s = nextRepeated++;
-				sendNextRepeated();
-				repeated++;
-			} else { // CONFIRM
-				currentCard.s = 2;
-				confirmed++;
-			}
+			repeated++;	
+			currentCard.s = nextRepeated++;
+			sendNextRepeated();
 			currentCard.f = 0;
 			currentCard.b = 0;
 			console.log("repeted!");
@@ -153,7 +89,6 @@ function updateProgress() {
 	}
 
 	sendChanges(inputStatus);
-    //nextCard();
 }
 
 //function showAnswer() {
@@ -218,39 +153,22 @@ function askQuestion() {
 	}
 }
 
+let counter = 0;
 function showStats() {
 	$('.stats').empty();
-	let cn = sessionLength - sessionList.length;
-	let pc = Math.round(cn / sessionLength * 100);
-	let re = '<b>';
-	re += cn + '/' + sessionLength + ': ' + pc + '%</b>';
-	re += '</b>';
-	
-	re += ' | <span class="green">l: ';
-	re += learnPlus + '-' + learnMinus;
-	re += ' <b>' + learned + '</b></span>';
-	re += ' | <span class="blue">c: ';
-	re += confirmPlus + '-' + confirmMinus;
-	re += '<b> ' + confirmed + '-' + notConfirmed + '</b></span>';
-	re += ' | r: ';
-	re += repeatPlus + '-' + repeatMinus;
+	let re = '<b>' + counter + ') </b>' + plus + '-' + minus;
 	re += '<b> ' + repeated + '-' + returned + '</b>';
-	
 	$('.stats').append(re);
+	counter++;
 }
 
 function nextCard() {
-	//showStats();
-	/*if(sessionList.length < 1) {
-		$('.word').text('Happy End!');
-		return;
-	}*/
+	showStats();
 
 	let index = randomFromRange(0, repeatList.length - 1);
 	currentCardId = repeatList[index];
 	repeatList.splice(index, 1);
-	
-	currentCardId = 23;
+	//currentCardId = 23;
 	
     currentCard = jsDb[currentCardId];
     let info = currentCardId + ' [' + currentCard.s + ']: ' + currentCard.f + ' ' + currentCard.b;
@@ -264,7 +182,7 @@ function nextCard() {
 }
 
 const main = function() {
-    console.log('version 0');
+    console.log('version 0.1');
 
 	$(document).on("keypress", function (event) {
 		//console.log(event.keyCode);

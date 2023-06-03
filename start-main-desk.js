@@ -1,5 +1,4 @@
 'use strict';
-let repeatNumber = 0, confirmDivider = 0;
 
 function prepareSession() {
     for(let i = 0; i < jsDb.length; i++) {
@@ -16,11 +15,8 @@ function prepareSession() {
 }
 
 function parseDb(crudeDb) {
-    nextRepeated = crudeDb[1][11];
-	maxToRepeat = crudeDb[3][11];
-	repeatNumber = crudeDb[5][11];
-	confirmDivider = crudeDb[7][11];
-    //console.log(nextRepeatedStatus);
+    nextRepeated = crudeDb[10][11];
+	maxToRepeat = crudeDb[12][11];
 
     for(let e of crudeDb) {
         if(isNaN(e[0])) break;
