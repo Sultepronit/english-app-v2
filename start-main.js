@@ -51,10 +51,10 @@ function parseDb(crudeDb) {
             s: e[0],
             f: e[1],
             b: e[2],
-            w: e[5],
-            trsc: e[6],
-            trsl: e[7],
-            e: e[8]
+            w: e[6],
+            trsc: e[7],
+            trsl: e[8],
+            e: e[9]
         };
         //console.log(obj);
         jsDb.push(obj);
