@@ -309,10 +309,13 @@ function nextCard() {
 }
 
 const main = function() {
-    $('.show').on('click', showAnswer);
+    console.log('version 0.1');
+
+	$('.show').on('click', showAnswer);
     $('.good').on('click', function() {updateProgress("GOOD");});
     $('.neutral').on('click', function() {updateProgress("NEUTRAL");});
     $('.bad').on('click', function() {updateProgress("BAD");});
+
 	$('.speak').on('click', function() {pronunciation(0);});
 	$('.word').on('click', function() {pronunciation(0);});
 }
