@@ -12,21 +12,21 @@ let currentCardId = 0;
 let currentCard = [];
 let wordVersions = {};
 let direction = '';
-//let progress;
-//let mark = '';
+let progress;
+let mark = '';
 
 let learnPlus = 0, learnMinus =0, learned = 0;
 let confirmPlus = 0, confirmMinus = 0, confirmed = 0, notConfirmed = 0;
 let repeatPlus = 0, repeatMinus = 0, repeated = 0, returned = 0;
 
 function sendNextRepeated() {
-	toCell(2 - 1, 'L', nextRepeated);
+	//toCell(2 - 1, 'L', nextRepeated);
 }
 
 function sendChanges(inputStatus) {
 	console.log('b ' + inputStatus[0] + ': ' + inputStatus[1] + ' ' + inputStatus[2]);
     console.log('a ' + currentCard.s + ': ' + currentCard.f + ' ' + currentCard.b);
-	if(inputStatus[0] !== currentCard.s) {
+	/*if(inputStatus[0] !== currentCard.s) {
 		toCell(currentCardId, 'A', currentCard.s);
 	}
 	if(inputStatus[1] !== currentCard.f) {
@@ -34,16 +34,10 @@ function sendChanges(inputStatus) {
 	}
 	if(inputStatus[2] !== currentCard.b) {
 		toCell(currentCardId, 'C', currentCard.b);
-	}
-	
-	/*if(direction == "BACKWARD" && mark == "GOOD") {
-		nextCard();
-	} else {
-		startTraining();
 	}*/
 }
 
-function updateProgress(mark) {
+function updateProgress() {
 	//if(mark == "UNEVALUATED") return;
 	
 	let inputStatus = [ currentCard.s, currentCard.f, currentCard.b ];
@@ -152,34 +146,22 @@ function updateProgress(mark) {
 		}
 	}
 	
-	/*if(inputStatus[0] !== currentCard[0]) {
-		toCell(currentCardId + 1, 'A', currentCard[0]);
-	}
-	if(inputStatus[1] !== currentCard[1]) {
-		toCell(currentCardId + 1, 'B', currentCard[1]);
-	}
-	if(inputStatus[2] !== currentCard[2]) {
-		toCell(currentCardId + 1, 'C', currentCard[2]);
-	}
-	
-	console.log('a ' + currentCard[0] + ': ' + currentCard[1] + ' | ' + currentCard[2]);
-	if(direction == "BACKWARD" && mark == "GOOD") {
+	if(direction === "BACKWARD" && mark === "GOOD") {
 		nextCard();
 	} else {
 		startTraining();
-	}*/
-    //console.log('b ' + inputStatus[0] + ': ' + inputStatus[1] + ' ' + inputStatus[2]);
-    //console.log('a ' + currentCard.s + ': ' + currentCard.f + ' ' + currentCard.b);
+	}
+
 	sendChanges(inputStatus);
-    nextCard();
+    //nextCard();
 }
 
 //function showAnswer() {
 let showAnswer = function() {
 	console.log(currentCard);
-	//progress = "EVALUATE";
-    $('.evaluation').show();
-    $('.show').hide();
+	progress = "EVALUATE";
+    /*$('.evaluation').show();
+    $('.show').hide();*/
 
 	//playSound();
     pronunciation(0);
@@ -192,7 +174,6 @@ let showAnswer = function() {
 		$(".word").text(currentCard.w);
 	}
 	
-	//if(wordVersions.words.length > 0) {
     if(wordVersions) {
 		$('.word').empty();
 		$(".word").append(wordVersions.text);
@@ -200,10 +181,12 @@ let showAnswer = function() {
 }
 
 function askQuestion() {
-    $('.evaluation').hide();
-    $('.show').show();
+	progress = "QUESTION";
 
-	//$(".word").css("border-bottom", "6px solid white");
+    /*$('.evaluation').hide();
+    $('.show').show();*/
+
+	$(".word").css("border-bottom", "6px solid white");
 	$('.word').empty();
 	$(".translation").empty();
 	$(".transcription").empty();
@@ -216,21 +199,17 @@ function askQuestion() {
 	}
 	
 	if(direction == "FORWARD") {
-		//hideInput();
+		hideInput();
 		
-		//if(wordVersions.words.length) {
         if(wordVersions) {
             $(".word").append(wordVersions.words[wordVersions.random]);
 		} else {
 			$(".word").append(currentCard.w);
 		}
-		
-		//$(".translation").text(" ");
 	} else { //BACKWARD
-		//progress = "TYPE_IN_ANSWER";
-		//showInput();
+		progress = "TYPE_IN_ANSWER";
+		showInput();
 		
-		//if(wordVersions.random >= 0) {
         if(wordVersions) {
 			$(".word").append('<i>' + wordVersions.labels[wordVersions.random] + '</i>');
 		} 
@@ -261,60 +240,60 @@ function showStats() {
 }
 
 function nextCard() {
-	showStats();
-	if(sessionList.length < 1) {
+	//showStats();
+	/*if(sessionList.length < 1) {
 		$('.word').text('Happy End!');
 		return;
-	}
+	}*/
+
+	let index = randomFromRange(0, repeatList.length - 1);
+	currentCardId = repeatList[index];
+	repeatList.splice(index, 1);
 	
-	let learnStatusIndex = randomFromRange(0, sessionList.length - 1);
-	learnStatus = sessionList[learnStatusIndex];
-	console.log(learnStatusIndex + ': ' + learnStatus);
-	sessionList.splice(learnStatusIndex, 1);
-	//console.log(sessionList);
-	
-	function chooseRandomCard(list) {
-		let index = randomFromRange(0, list.length - 1);
-		currentCardId = list[index];
-		list.splice(index, 1);
-	};
-	
-	switch(learnStatus) {
-		case "REPEAT":
-			chooseRandomCard(repeatList);
-			break;
-		case "CONFIRM":
-			chooseRandomCard(confirmList);
-			break;
-		case "LEARN":
-			chooseRandomCard(learnList);
-			//console.log(learnList);
-			break;
-		default:
-			console.log( learnStatus + '!!!');
-			break;
-	}
-    //currentCardId = 23;
+	currentCardId = 23;
 	
     currentCard = jsDb[currentCardId];
     let info = currentCardId + ' [' + currentCard.s + ']: ' + currentCard.f + ' ' + currentCard.b;
 	$('.card-info').text(info);
 
 	direction = (currentCard.f > currentCard.b) ? "BACKWARD" : "FORWARD";
+	//direction = "BACKWARD";
+	mark = "UNEVALUATED";
 	
-	/*wordVersions = {words: [], labels: [], random: -1, text: ''};
-	progress = "QUESTION";
-	mark = "UNEVALUATED";*/
 	askQuestion();
 }
 
 const main = function() {
-    console.log('version 0.1.1');
+    console.log('version 0');
 
-	$('.show').on('click', showAnswer);
-    $('.good').on('click', function() {updateProgress("GOOD");});
-    $('.neutral').on('click', function() {updateProgress("NEUTRAL");});
-    $('.bad').on('click', function() {updateProgress("BAD");});
+	$(document).on("keypress", function (event) {
+		//console.log(event.keyCode);
+		//console.log(event.code);
+		//console.log(event.key);
+		$(".status").text(event.key);
+
+		switch(event.keyCode) {
+			case 97: 
+				playSound();
+				break;
+			case 13: 
+				pressedEnter();
+				break;
+			case 103:
+				pressedG();
+				break;
+			case 98:
+				pressedB();
+				break;
+			case 110:
+				pressedN();
+				break;
+			case 7: 
+				pronunciation(0);
+				break;
+		}
+
+	});
 
 	$('.speak').on('click', function() {pronunciation(0);});
 	$('.word').on('click', function() {pronunciation(0);});

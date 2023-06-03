@@ -69,9 +69,3 @@ function pronunciation(wordCounter) {
 	}
 }
 
-/*function playSound() {
-	//if(progress == "TRAINING" || progress == "TYPE_IN_ANSWER") return;
-	//pronunciation3(0);
-	pronunciation(0);
-}*/
-
