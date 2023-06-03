@@ -33,7 +33,7 @@ function sendChanges(inputStatus) {
 		toCell(currentCardId, 'B', currentCard.f);
 	}
 	if(inputStatus[2] !== currentCard.b) {
-		toCell(currentCardId + 1, 'C', currentCard.b);
+		toCell(currentCardId, 'C', currentCard.b);
 	}
 	
 	/*if(direction == "BACKWARD" && mark == "GOOD") {
@@ -309,7 +309,7 @@ function nextCard() {
 }
 
 const main = function() {
-    console.log('version 0.1');
+    console.log('version 0.1.1');
 
 	$('.show').on('click', showAnswer);
     $('.good').on('click', function() {updateProgress("GOOD");});
