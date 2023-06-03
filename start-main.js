@@ -17,7 +17,7 @@ function prepareSession() {
 		}
 	}
 
-    console.log(nextRepeatedStatus + " / " + maxToRepeat);
+    console.log(nextRepeated + " / " + maxToRepeat);
 	console.log(repeatList);
 	console.log(confirmList);
 	console.log(learnList);
@@ -38,7 +38,7 @@ function prepareSession() {
 }
 
 function parseDb(crudeDb) {
-    nextRepeatedStatus = crudeDb[1][11];
+    nextRepeated = crudeDb[1][11];
 	maxToRepeat = crudeDb[3][11];
 	repeatNumber = crudeDb[5][11];
 	confirmDivider = crudeDb[7][11];

@@ -20,7 +20,9 @@ function getData () {
 }
 
 function toCell(num, col, newValue)
-{
+{	
+	num++;
+	console.log(num+col + ': ' + newValue);
 	var action = "toCelll";
 	var xhr = new XMLHttpRequest();
 	var body = 'num=' + encodeURIComponent(num) + '&col=' + encodeURIComponent(col) +
