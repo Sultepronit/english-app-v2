@@ -22,6 +22,7 @@ function sendNextRepeated() {
 }
 
 function sendChanges(inputStatus) {
+	console.log(currentCard.w + ':');
 	console.log('b ' + inputStatus[0] + ': ' + inputStatus[1] + ' ' + inputStatus[2]);
     console.log('a ' + currentCard.s + ': ' + currentCard.f + ' ' + currentCard.b);
 	if(currentCard.s < 0) {
@@ -36,6 +37,12 @@ function sendChanges(inputStatus) {
 	}
 	if(inputStatus[2] !== currentCard.b) {
 		toCell(currentCardId, 'F', currentCard.b);
+	}
+
+	if(direction === "BACKWARD" && mark === "GOOD") {
+		nextCard();
+	} else {
+		startTraining();
 	}
 }
 
@@ -82,11 +89,11 @@ function updateProgress() {
 		}
 	}
 	
-	if(direction === "BACKWARD" && mark === "GOOD") {
+	/*if(direction === "BACKWARD" && mark === "GOOD") {
 		nextCard();
 	} else {
 		startTraining();
-	}
+	}*/
 
 	sendChanges(inputStatus);
 }

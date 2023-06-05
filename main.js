@@ -22,6 +22,7 @@ function sendNextRepeated() {
 }
 
 function sendChanges(inputStatus) {
+	console.log(currentCard.w + ':');
 	console.log('b ' + inputStatus[0] + ': ' + inputStatus[1] + ' ' + inputStatus[2]);
     console.log('a ' + currentCard.s + ': ' + currentCard.f + ' ' + currentCard.b);
 	if(inputStatus[0] !== currentCard.s) {
@@ -33,6 +34,8 @@ function sendChanges(inputStatus) {
 	if(inputStatus[2] !== currentCard.b) {
 		toCell(currentCardId, 'C', currentCard.b);
 	}
+
+	nextCard();
 }
 
 function updateProgress(mark) {
@@ -143,7 +146,7 @@ function updateProgress(mark) {
 	}
 	
 	sendChanges(inputStatus);
-    nextCard();
+    //nextCard();
 }
 
 //function showAnswer() {
