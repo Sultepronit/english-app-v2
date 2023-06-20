@@ -18,6 +18,13 @@ function prepareSession() {
 	}
 
     console.log(nextRepeated + " / " + maxToRepeat);
+	const dif = repeatList.length - 400;
+	if(dif < 0) {
+		maxToRepeat -= dif * 2;
+		console.log(nextRepeated + " / " + maxToRepeat);
+		sendMaxToRepeat();
+	}
+
 	console.log(repeatList);
 	console.log(confirmList);
 	console.log(learnList);

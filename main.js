@@ -17,6 +17,10 @@ let learnPlus = 0, learnMinus =0, learned = 0;
 let confirmPlus = 0, confirmMinus = 0, confirmed = 0, notConfirmed = 0;
 let repeatPlus = 0, repeatMinus = 0, repeated = 0, returned = 0;
 
+function sendMaxToRepeat() {
+	toCell(4 - 1, 'L', maxToRepeat);
+}
+
 function sendNextRepeated() {
 	toCell(2 - 1, 'L', nextRepeated);
 }
@@ -40,6 +44,7 @@ function sendChanges(inputStatus) {
 
 function updateProgress(mark) {
 	//if(mark == "UNEVALUATED") return;
+	if(!endedPlaying) return;
 	
 	let inputStatus = [ currentCard.s, currentCard.f, currentCard.b ];
 	
@@ -281,7 +286,7 @@ function nextCard() {
 }
 
 const main = function() {
-    console.log('version 0.1.1');
+    console.log('version 0.2');
 
 	$('.show').on('click', showAnswer);
     $('.good').on('click', function() {updateProgress("GOOD");});

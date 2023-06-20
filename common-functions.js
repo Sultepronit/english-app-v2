@@ -22,11 +22,12 @@ function splitWordVersions() {
 	console.log(wordVersions);
 }
 
-let audio = new Audio();
-
+const audio = new Audio();
+let endedPlaying = false;
 function pronunciation(wordCounter) {
+	endedPlaying = false;
 	cardWord = '';
-	//if(wordVersions.words.length > 0) {
+	
 	if(wordVersions) {
 		cardWord = wordVersions.words[wordCounter];
 		//console.log(wordCounter);
@@ -46,8 +47,8 @@ function pronunciation(wordCounter) {
 		audio.play();
 		
 		audio.onended = function() { 
+			endedPlaying = true;
 			wordCounter++;
-			//if(wordCounter < wordVersions.words.length) {
 			if(wordVersions && wordCounter < wordVersions.words.length) {
 				pronunciation(wordCounter);
 			}
@@ -61,6 +62,7 @@ function pronunciation(wordCounter) {
 		speechSynthesis.speak(utterance);
 
 		utterance.onend = (event) => {
+			endedPlaying = true;
 			wordCounter++;
 			if(wordVersions && wordCounter < wordVersions.words.length) {
 				pronunciation(wordCounter);
