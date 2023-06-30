@@ -194,6 +194,7 @@ function askQuestion() {
 	if(currentCard.w[0] == '/') {
 		splitWordVersions();
 	}
+	prepareSound();
 	
 	if(direction == "FORWARD") {
 		//hideInput();
@@ -275,6 +276,7 @@ function nextCard() {
 			break;
 	}
     //currentCardId = 23;
+	currentCardId = 40;
 	
     currentCard = jsDb[currentCardId];
     let info = currentCardId + ' [' + currentCard.s + ']: ' + currentCard.f + ' ' + currentCard.b;
@@ -286,7 +288,7 @@ function nextCard() {
 }
 
 const main = function() {
-    console.log('version 0.2');
+    console.log('version 0.3');
 
 	$('.show').on('click', showAnswer);
     $('.good').on('click', function() {updateProgress("GOOD");});
