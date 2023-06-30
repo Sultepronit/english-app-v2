@@ -50,7 +50,7 @@ function evaluateAnswer() {
 }
 
 function pressedEnter() {
-    console.log(progress);
+    //console.log(progress);
 	switch(progress) {
 		case "QUESTION":
 			showAnswer();

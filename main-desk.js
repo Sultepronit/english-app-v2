@@ -98,10 +98,15 @@ function updateProgress() {
 	sendChanges(inputStatus);
 }
 
+function afterPlayback() {
+	progress = "EVALUATE";
+}
+
 //function showAnswer() {
 let showAnswer = function() {
 	console.log(currentCard);
-	progress = "EVALUATE";
+	//progress = "EVALUATE";
+	progress = "LISTENING";
     /*$('.evaluation').show();
     $('.show').hide();*/
 
@@ -139,6 +144,7 @@ function askQuestion() {
 	if(currentCard.w[0] == '/') {
 		splitWordVersions();
 	}
+	prepareSound();
 	
 	if(direction == "FORWARD") {
 		hideInput();

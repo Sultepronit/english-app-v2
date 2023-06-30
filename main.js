@@ -154,12 +154,17 @@ function updateProgress(mark) {
     //nextCard();
 }
 
-//function showAnswer() {
-let showAnswer = function() {
+function afterPlayback() {
+	$('.evaluation').show();
+}
+
+function showAnswer() {
 	console.log(currentCard);
 	//progress = "EVALUATE";
-    $('.evaluation').show();
-    $('.show').hide();
+	$('.show').hide();
+	/*if(endedPlaying) {
+		$('.evaluation').show();
+	}*/
 
 	//playSound();
     pronunciation(0);

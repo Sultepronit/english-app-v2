@@ -73,6 +73,7 @@ function pronunciation(n) {
 		} else {
 			console.log('ended all!');
 			endedPlaying = true;
+			afterPlayback();
 		}
 	} 
 
@@ -88,7 +89,7 @@ function pronunciation(n) {
 	}
 }
 
-
+/*
 const audio = new Audio();
 function pronunciation0(wordCounter) {
 	endedPlaying = false;
@@ -136,4 +137,4 @@ function pronunciation0(wordCounter) {
 		}
 	}
 }
-
+*/
