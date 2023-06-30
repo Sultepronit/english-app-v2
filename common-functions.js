@@ -25,11 +25,8 @@ function splitWordVersions() {
 const playList = [];
 let endedPlaying = false;
 function prepareSound() {
-	//console.log('preparing....');
+	endedPlaying = false;
 	playList.length = 0;
-	/*let word = currentCard.w;
-	word = 'applle';
-	let urls = soundObject[word];*/
 	let words = [];
 	if(wordVersions) {
 		words = wordVersions.words;
