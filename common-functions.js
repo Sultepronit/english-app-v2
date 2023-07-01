@@ -56,6 +56,8 @@ function prepareSound() {
 			const utterance = new SpeechSynthesisUtterance(word);
 			utterance.lang = 'en';
 			utterance.rate = 0.8;
+			utterance.volume = 0;
+			speechSynthesis.speak(utterance);
 			playList.push({
 				type: "synth",
 				utterance: utterance
@@ -84,57 +86,9 @@ function pronunciation(n) {
 		playList[n].sources[playList[n].index].play();
 		playList[n].sources[playList[n].index].onended = () => {onend()};
 	} else { // synth
+		playList[n].utterance.volume = 1;
 		speechSynthesis.speak(playList[n].utterance);
 		playList[n].utterance.onend = () => {onend()};
 	}
 }
 
-/*
-const audio = new Audio();
-function pronunciation0(wordCounter) {
-	endedPlaying = false;
-	cardWord = '';
-	
-	if(wordVersions) {
-		cardWord = wordVersions.words[wordCounter];
-		//console.log(wordCounter);
-	} else {
-		cardWord = currentCard.w;
-	}
-	console.log(cardWord);
-	
-	let urls = soundObject[cardWord];
-	if(urls) {
-		//console.log(urls);
-		console.log(urls.length);
-		
-		let randomUrl = randomFromRange(0, urls.length - 1);
-		console.log(randomUrl + ': ' + urls[randomUrl]);
-		audio.src = urls[randomUrl];
-		audio.play();
-		
-		audio.onended = function() { 
-			endedPlaying = true;
-			wordCounter++;
-			if(wordVersions && wordCounter < wordVersions.words.length) {
-				pronunciation(wordCounter);
-			}
-		}
-		
-	} else {
-		console.log("no pronunciation!");
-		let utterance = new SpeechSynthesisUtterance(cardWord);
-		utterance.lang = 'en';
-		utterance.rate = 0.8;
-		speechSynthesis.speak(utterance);
-
-		utterance.onend = (event) => {
-			endedPlaying = true;
-			wordCounter++;
-			if(wordVersions && wordCounter < wordVersions.words.length) {
-				pronunciation(wordCounter);
-			}
-		}
-	}
-}
-*/
